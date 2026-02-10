@@ -1,39 +1,49 @@
 ---
-name: Kickoff (Tech Lead)
-about: Bootstrap + Architecture + API contract + Tasks
-title: "Kickoff: News Web MVP"
-labels: ["agent:kickoff"]
+name: "Kickoff: Tech Lead"
+about: "Tech Lead lee product_docs/ y genera /docs (arquitectura, contrato API y tareas)."
+title: "Kickoff: <Project name>"
+labels: ["kickoff", "tech-lead"]
 ---
 
-## Goal
-Build the MVP for a news website (frontend + backend) based on the documentation below.
+## Fuente de verdad
+Tech Lead: usa `product_docs/` como fuente primaria. NO asumas requisitos no escritos.
 
-## Important
-- If the monorepo scaffold is missing, bootstrap it first (per `.github/copilot-instructions.md`).
-- Then produce `/docs/architecture.md`, `/docs/api-contract.md`, `/docs/tasks.md`.
-- Deliver changes as a PR.
+- Carpeta de documentación: `product_docs/`
+- Si hay varios archivos, identifica automáticamente:
+  - la especificación principal (el documento más completo)
+  - backlog/historias (si existe)
+  - modelo de datos (.sql) (si existe)
+  - ejemplos (si existen)
 
-## Constraints / Hosting
-- Hosting target (e.g., HostGator / Vercel / etc.):
-- Backend deploy (where/how):
-- Database (if any):
-- Auth (if any):
-- News sources (RSS/APIs) + update frequency:
-- SEO requirements:
-- Analytics (if any):
+## Cambios / Overrides (solo si difiere de product_docs)
+- Hosting target: (Vercel / otro)
+- UI styling: (Tailwind / CSS Modules / otro)
+- Idioma del sitio:
+- Dominio (si aplica):
+- Frecuencia de actualización (si aplica):
+- DB provider (si aplica):
+
+## Decisiones que debes dejar por escrito en /docs/architecture.md
+- Arquitectura BE (Next Route Handlers vs Express/Fastify separado vs servicio externo)
+- Estrategia de actualización (cron vs cache revalidate vs scheduler externo)
+- Persistencia (DB/KV/none) y por qué
+- Estrategia de deduplicación
+- Caching (TTL) y rate limits (si aplica)
 
 ## Requisitos de ejecución local (obligatorio)
-- Debe funcionar en local con:
+- Debe funcionar con:
   - `npm install`
-  - `npm run dev` (levanta web + api)
-  - `npm run build` (sin errores)
-- El frontend debe consumir el backend usando `NEXT_PUBLIC_API_URL` (ej: http://localhost:3001).
-- No usar código que dependa solo de Vercel/prod para funcionar.
+  - `npm run dev`
+  - `npm run build`
+- Documentar variables de entorno en `.env.example` (sin secretos).
 
-## Reglas Next.js
-- Si una página usa estado/efectos/inputs (search, filtros interactivos), debe ser Client Component (`"use client"`).
-- El render inicial debe ser compatible con SSR (no crashear en build).
+## UI / Diseño (si no está 100% claro)
+- Si faltan detalles de diseño, propón 2 opciones (A/B) y elige una para el MVP.
+- No entregar UI “plana”: cards, spacing, estados loading/empty/error, responsive.
 
-
-## Product documentation
-(Paste here)
+## Entregables del Tech Lead
+- `/docs/architecture.md`
+- `/docs/api-contract.md`
+- `/docs/tasks.md`
+- (si falta scaffold) bootstrap del monorepo según `.github/copilot-instructions.md`
+- Abrir PR con todo lo anterior.

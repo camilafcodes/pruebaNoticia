@@ -1,0 +1,485 @@
+﻿Product Backlog - Portal de Noticias
+
+Fase 1: Configuración e Implementación del Núcleo del Backend
+ID
+HT-01: Configuración de la Base de Datos
+Título
+Configurar la base de datos en PostgreSQL.
+Descripción
+Como desarrollador Backend, quiero configurar y ejecutar el script de la base de datos PostgreSQL para que el proyecto disponga de una estructura de persistencia para las noticias.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Crear un script SQL (news-portal-database-model.sql).
+2. Definir la tabla news con las columnas, tipos de datos y restricciones (NOT NULL, DEFAULT FALSE) especificadas.
+3. Establecer newId como PRIMARY KEY. 
+4. Ejecutar el script en el entorno de desarrollo.
+Criterios de Aceptación
+- La tabla news existe en la base de datos PostgreSQL.  
+- Todas las columnas (newId, portalName, etc.) están presentes con sus tipos y restricciones correctas. 
+- El campo flag tiene FALSE como valor por defecto.
+
+ID
+HT-02: Inicialización del Proyecto Backend
+Título
+Estructurar y configurar el proyecto Backend en Node.js.
+Descripción
+Como desarrollador Backend, quiero inicializar el proyecto Node.js con una estructura escalable y configurar las dependencias básicas para facilitar el desarrollo y mantenimiento.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Inicializar el proyecto (npm init). 
+2. Instalar dependencias: Express.js, node-postgres (pg), node-cron, axios, xml2js. 
+3. Definir una estructura de carpetas (ej. /src, /controllers, /services, /config). 
+4. Crear un archivo .env para gestionar la conexión a la BD y otras variables.
+Criterios de Aceptación
+- El proyecto Node.js debe iniciarse sin errores. 
+- La aplicación se conecta exitosamente a la base de datos PostgreSQL. 
+- Las variables de entorno se cargan y utilizan correctamente.
+
+ID
+HT-03: Creación del CronJob para Recolección de Noticias
+Título
+Implementar el CronJob para la ejecución programada.
+Descripción
+Como sistema, quiero ejecutar un proceso de recolección de noticias automáticamente en horarios definidos para que la información del portal se mantenga siempre actualizada.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Integrar la librería node-cron. 
+2. Configurar el job para que se ejecute a las 6 am, 12 pm y 6 pm (hora colombiana). 
+3. El job debe invocar la función principal de consumo de feeds. 
+4. Añadir logs para registrar el inicio y fin de cada ejecución.
+Criterios de Aceptación
+- El trabajo programado se activa puntualmente en los tres horarios definidos. 
+- Cada ejecución invoca correctamente la lógica de procesamiento de noticias. 
+- Las ejecuciones quedan registradas en la consola o en un archivo de log.
+
+ID
+HT-04: Módulo de Consumo y Parseo de Feeds RSS
+Título
+Desarrollar el módulo de consumo y parseo de feeds RSS.
+Descripción
+Como sistema, quiero consumir y transformar los feeds RSS de una lista predefinida de fuentes a un formato JSON estandarizado, para poder procesar la información de cada noticia y asignarle su categoría correcta.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+    1. Crear un módulo de configuración (ej. en un archivo config.js o como variable de entorno) que mapee cada categoría a su URL de feed RSS: 
+Política:https://www.infobae.com/arc/outboundfeeds/rss/category/colombia/ Actualidad: https://qhubocali.com/feed/
+Economía: https://www.valoraanalitik.com/feed/
+Deportes: https://www.futbolred.com/rss 
+Finanzas: https://feeds.elpais.com/mrss-s/list/ep/site/elpais.com/tag/finanzas_a
+2. Implementar una función que itere sobre esta configuración, consumiendo cada feed RSS mediante una petición GET (ej. con axios). 
+3. Para cada respuesta, usar una librería como xml2js para transformar el contenido XML a un objeto JSON, como el siguiente: 
+{
+  "newId": " el-banco-sabadell-cierra-las-cuentas-de-2025",
+  "portalName": "Infobae",
+  "newTitle": "Noticia de última hora",
+  "newDate": "2026-02-09T10:30:00Z",
+  "image": "https://www.example.com/images/noticia.jpg",
+  "description": "Esta es una breve descripción de la noticia.",
+  "content": "Contenido completo y detallado de la noticia.",
+  "category": "Politica",
+  "flag": false
+} 
+Para este caso Las propiedades adicionales a newId se deben extraer por cada item consultado al feed que corresponde a cada categoría, excepto category y flag, category será seteado de acuerdo el feed ejecutado y el flag será seteado por la base de datos con un valor false por defecto
+4. Crear transformadores/mapeadores específicos para cada fuente (Infobae, Qhubocali, Valora, etc.) que estandaricen el objeto JSON resultante a un formato único que el sistema pueda procesar. Esto es crucial para gestionar las diferentes estructuras de los XML de cada portal.
+Criterios de Aceptación
+- La función puede consumir con éxito los 5 feeds RSS especificados. 
+- El contenido XML de cada feed se transforma en un objeto JSON estructurado y predecible. 
+- Se puede acceder a los items (noticias) dentro del JSON resultante.
+
+ID
+HT-05: Lógica de Transformación y Generación de newId
+Título
+Implementar la lógica para generar el newId a partir de la URL.
+Descripción
+Como sistema, quiero generar un identificador único (newId) para cada noticia a partir de su URL, para usarlo como clave primaria y evitar duplicados.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Crear una función que extraiga la etiqueta <link> de cada ítem del feed. 
+2. Construir un patrón Regex que capture la parte relevante de la URL. 
+3. Aplicar el Regex al link para generar el newId como un string. Por ejemplo, URL original extraído de la etiqueta <link>: https://elpais.com/economia/2026-02-06/el-banco-sabadell-cierra-lascuentas-de-2025-con-1775-millones-de-beneficio-la-opa-salvada-y-buscando-ganarmas-clientes-en-espana.html, newId generado: el-banco-sabadell-cierra-las-cuentas-de-2025-con-1775-millones-debeneficio-la-opa-salvada-y-buscando-ganar-mas-clientes-en-espana
+4. Probar el Regex con ejemplos de URLs de todos los portales.
+Criterios de Aceptación
+- Se genera un newId único y consistente para cada noticia, basado en su URL. 
+- El newId resultante coincide con el formato del ejemplo: " el-banco-sabadell-cierra-las-cuentas-de-2025-con-1775-millones-debeneficio-la-opa-salvada-y-buscando-ganar-mas-clientes-en-espana
+
+ID
+HT-06: Proceso de Persistencia de Noticias
+Título
+Desarrollar el proceso de guardado de noticias en la base de datos.
+Descripción
+Como sistema, quiero guardar las noticias nuevas en la base de datos, evitando duplicados, para construir el repositorio de información del portal.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Crear una función saveNewIfNotExists. 
+2. Antes de guardar, consultar en la tabla news si ya existe un registro con el mismo newId. 
+3. Si no existe, construir el objeto new con todos sus campos (newId, portalName, newTitle, newDate, image, description, content, category y flag)
+4. Ejecutar la sentencia INSERT en la base de datos.
+Criterios de Aceptación
+- Las noticias que no existen en la base de datos son insertadas correctamente. 
+- Las noticias cuyo newId ya existe en la base de datos no se insertan de nuevo. 
+- El campo category se asigna correctamente según el feed de origen.
+
+Fase 2: Desarrollo de API Backend y Funcionalidades Adicionales
+ID
+HT-07: Endpoints REST getAll por Categoría
+Título
+Crear endpoints REST para obtener noticias por categoría con paginación.
+Descripción
+Como desarrollador Frontend, quiero tener acceso a endpoints REST que me devuelvan una lista de noticias paginada y ordenada por fecha para cada categoría.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Crear 5 rutas en Express: api/v1/actualidad, api/v1/politica, api/v1/economía, api/v1/deportes, api/v1/finanzas. 
+2. Implementar los controladores que consulten la tabla news filtrando por categoría. 
+3. La consulta debe ordenar los resultados por newDate de forma descendente. 
+4. Implementar paginación (ej. usando LIMIT y OFFSET) con un tamaño de página de 10.
+Criterios de Aceptación
+- Cada endpoint (/api/v1/[categoria]) devuelve un JSON con un array de 10 noticias. 
+- Las noticias devueltas pertenecen a la categoría correcta. 
+- Las noticias están ordenadas de la más reciente a la más antigua. 
+- El endpoint acepta un parámetro de página (ej. ?page=2).
+
+ID
+HT-08: Endpoint para Noticias Destacadas
+Título
+Crear el endpoint api/v1/actualidad/4 para noticias destacadas.
+Descripción
+Como desarrollador Frontend, quiero un endpoint específico que me devuelva las 4 noticias más importantes de la categoría "Actualidad" para mostrarlas de forma destacada.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Crear la ruta GET /api/v1/actualidad/4. 
+2. Implementar una consulta SQL que seleccione 4 noticias de la categoría 'Actualidad'. 
+3. La consulta debe priorizar las noticias con flag = true y luego ordenar por newDate descendente.
+Criterios de Aceptación
+- El endpoint devuelve un array con un máximo de 4 noticias. 
+- Las noticias devueltas cumplen con los criterios de prioridad: primero las que tienen flag = true y son más recientes, luego las más recientes en general.
+
+ID
+HT-09: Manejo de Errores en Consumo de Feeds
+Título
+Implementar manejo de errores robusto en el consumo de feeds RSS.
+Descripción
+Como sistema, quiero que el proceso de recolección de noticias continúe funcionando incluso si uno de los feeds RSS falla, para garantizar la máxima disponibilidad de contenido.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Envolver cada llamada a un feed RSS en un bloque try/catch. 
+2. En caso de error (ej. timeout, error 404, XML malformado), registrar el fallo con el nombre del feed. 
+3. Asegurarse de que el flujo principal no se interrumpa y continúe con el siguiente feed de la lista. 
+4. Considerar tomar un feed de respaldo si uno falla, según lo indicado.
+Criterios de Aceptación
+- Si un feed RSS no está disponible, el CronJob finaliza su ejecución sin fallar. 
+- Los errores de feeds individuales se registran para su posterior revisión. 
+- El resto de los feeds que sí funcionan son procesados y guardados correctamente.
+
+ID
+HT-10: Carga Manual de Noticias (customNews)
+Título
+Implementar el proceso de carga de noticias personalizadas desde un archivo local.
+Descripción
+Como administrador de contenido, quiero poder añadir noticias personalizadas al sistema simplemente colocando un archivo JSON y sus imágenes en una carpeta, para que se carguen al iniciar la aplicación.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Crear una lógica (similar a Command Line Runner) que se ejecute una sola vez al iniciar la aplicación. 
+2. Leer y parsear el archivo custom-json-structure.json de la carpeta customNews/news. 
+3. Para cada noticia, mapear los datos a la estructura de la tabla news. 
+4. Actualizar el campo newDate a la fecha actual y guardarlo en la base de datos.
+Criterios de Aceptación
+- Al iniciar el backend, se leen las noticias del archivo JSON. 
+- Las noticias personalizadas se insertan o actualizan en la base de datos. 
+- La ruta de las imágenes se gestiona correctamente.
+
+ID
+HT-11: Actualización de newDate para "Actualidad"
+Título
+Desarrollar el proceso de actualización de fecha para noticias de "Actualidad".
+Descripción
+Como sistema, quiero que después de cada ejecución del job, ciertas noticias de "Actualidad" actualicen su fecha para que aparezcan como más recientes.
+Responsable
+Desarrollador Backend
+Tareas Sugeridas
+1. Crear un proceso que se ejecute después del guardado de noticias del CronJob.  
+2. Ejecutar una sentencia UPDATE en la tabla news. 
+3. La actualización debe establecer newDate a la fecha/hora actual (NOW()). 
+4. El WHERE de la consulta debe filtrar por category = 'Actualidad' Y flag = true.
+Criterios de Aceptación
+- Las noticias que cumplen las condiciones (Actualidad y flag=true) actualizan su newDate a la fecha actual tras la ejecución del job. 
+- Las demás noticias no son modificadas.
+
+
+
+
+
+Fase 3: Desarrollo del Frontend - Estructura y Componentes Visuales
+ID
+HT-12: Inicialización del Proyecto Frontend
+Título
+Estructurar y configurar el proyecto Frontend en Next.js con Tailwind CSS.
+Descripción
+Como desarrollador Frontend, quiero inicializar el proyecto Next.js y configurar Tailwind CSS para tener una base sólida y un sistema de utilidades CSS para el desarrollo visual.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Crear un nuevo proyecto Next.js (npx create-next-app). 
+2. Seguir la guía de instalación de Tailwind CSS para Next.js. 
+3. Configurar el archivo tailwind.config.js y globals.css. 
+4. Crear una estructura de carpetas (ej. /components, /pages, /styles).
+Criterios de Aceptación
+- El proyecto Next.js se ejecuta en modo desarrollo. 
+- Las clases de utilidad de Tailwind CSS (ej. bg-blue-500, text-xl) se pueden aplicar y funcionan correctamente.
+
+ID
+HT-13: Componente Encabezado (Header) Responsive
+Título
+Crear el componente Header responsive con logo, slogan y fecha.
+Descripción
+Como usuario, quiero ver un encabezado claro y consistente en todas las páginas para identificar el sitio y ver la fecha actual, adaptado a mi dispositivo.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Crear el componente Header.jsx. 
+2. Añadir placeholders para Logo y Slogan. 
+3. Implementar lógica para obtener y formatear la fecha actual. 
+4. Aplicar clases de Tailwind para el diseño responsive: flex-col en móvil, flex-row en desktop.
+Criterios de Aceptación
+- El componente muestra un logo, un slogan y la fecha actual. 
+- En desktop (>768px), los elementos se muestran en una línea con la fecha a la derecha. 
+- En móvil (<768px), el logo, slogan y fecha se apilan verticalmente.
+
+ID
+HT-14: Componente Menú Responsive
+Título
+Crear el componente de Menú de navegación responsive.
+Descripción
+Como usuario, quiero poder navegar fácilmente entre las diferentes categorías de noticias a través de un menú que funcione bien tanto en escritorio como en mi móvil.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Crear el componente Menu.jsx. 
+2. En desktop, renderizar una lista horizontal con las 5 categorías (Actualidad, Política, Economía, Deportes y Finanzas). 
+3. En móvil, renderizar un botón de hamburguesa. 
+4. Implementar la lógica de estado para mostrar/ocultar un menú desplegable al hacer clic en la hamburguesa.
+Criterios de Aceptación
+- En desktop, el menú es una barra horizontal con 5 enlaces. 
+- En móvil y tablets, se muestra un icono de hamburguesa. 
+- Al hacer clic en la hamburguesa, se despliega un menú vertical con las categorías.
+
+ID
+HT-15: Componente Pie de página (Footer) Responsive
+Título
+Crear el componente Footer responsive.
+Descripción
+Como usuario, quiero encontrar información de contacto y redes sociales en un pie de página al final del sitio.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Crear el componente Footer.jsx. 
+2. Añadir placeholders para logo, enlaces a redes sociales (Facebook, Linkedin, Twitter) y texto de copyright. 
+3. Aplicar estilos con Tailwind CSS para asegurar que sea responsive.
+Criterios de Aceptación
+- El footer muestra el logo, los iconos de redes sociales y el texto "Copyright 2026 [nombre página web]". 
+- El diseño se adapta correctamente a pantallas móviles y de escritorio.
+
+ID
+HT-16: Maquetación del Layout Principal (Padre/Hijo)
+Título
+Maquetar el layout responsive del cuerpo de la página (secciones padre e hijo).
+Descripción
+Como usuario, quiero que la disposición del contenido principal se ajuste a mi pantalla para tener la mejor experiencia de lectura posible.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. En la página principal, definir la estructura del layout con CSS Grid o Flexbox. 
+2. En desktop, asignar 70% de ancho a la sección "padre" y 30% a la "hija". 
+3. En móvil, ambas secciones deben ocupar el 100% del ancho y mostrarse en orden descendente (padre, luego hijo).
+Criterios de Aceptación
+- En pantallas de escritorio, el contenido se muestra en dos columnas (70/30). 
+- En pantallas móviles, el contenido se muestra en una sola columna, con la sección "hija" debajo de la "padre".
+
+Fase 4: Desarrollo del Frontend - Lógica de Datos e Interacción
+ID
+HT-17: Componente de Grilla de Noticias (Grid View)
+Título
+Crear el componente que renderiza la grilla de noticias.
+Descripción
+Como usuario, quiero ver una lista de noticias en formato de grilla, con una imagen y un resumen, para poder escanear rápidamente los titulares del día.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Crear un componente NewsCard.jsx para una sola noticia. 
+2. Este componente recibirá props como image, newTitle, portalName, y description. 3. Crear un componente NewsGrid.jsx que reciba un array de noticias y renderice un NewsCard por cada una.
+Criterios de Aceptación
+- Se muestra una grilla de noticias. 
+- Cada noticia en la grilla muestra su imagen, título, fuente y una breve descripción. 
+- La grilla es responsive y se ve bien en todos los tamaños de pantalla.
+
+ID
+HT-18: Integración con API para Carga de Noticias
+Título
+Integrar el frontend con la API del backend para cargar noticias por categoría.
+Descripción
+Como usuario, quiero que al hacer clic en una categoría del menú, se muestren las noticias correspondientes a esa selección.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Usar useEffect y useState en la página principal para gestionar las noticias. 
+2. Implementar una función que haga fetch al endpoint del backend (ej. api/v1/politica). 
+3. La categoría por defecto al cargar la página será "Actualidad". 
+4. Al hacer clic en un item del menú, llamar a la función de fetch con la nueva categoría.
+Criterios de Aceptación
+- Al cargar la página, se muestran las noticias de "Actualidad". 
+- Al cambiar de categoría en el menú, la grilla de noticias se actualiza con el contenido correspondiente.
+
+ID
+HT-19: Implementación de Paginación en Frontend
+Título
+Implementar la lógica de paginación en el frontend.
+Descripción
+Como usuario, quiero poder navegar a través de diferentes páginas de resultados para ver noticias más antiguas.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Añadir botones de "Siguiente" y "Anterior" debajo de la grilla de noticias. 
+2. Gestionar el número de página actual en el estado del componente. 
+3. Al hacer clic en los botones, realizar una nueva llamada a la API con el parámetro de página correspondiente (ej. ?page=2).
+Criterios de Aceptación
+- Los botones de paginación son visibles. 
+- Al hacer clic en "Siguiente", se carga y muestra el siguiente conjunto de 10 noticias.
+
+ID
+HT-20: Vista de Detalle de Noticia (Detail View)
+Título
+Implementar la vista de detalle del artículo sin una nueva llamada a la API.
+Descripción
+Como usuario, quiero hacer clic en una noticia de la grilla y ver su contenido completo de inmediato, aprovechando los datos ya cargados.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Gestionar una "noticia seleccionada" en el estado. 
+2. Al hacer clic en un NewsCard, buscar el objeto completo de esa noticia en el array de datos ya existente en el estado y ponerlo en "noticia seleccionada". 
+3. Renderizar condicionalmente la vista de detalle, usando el campo content del objeto seleccionado. 
+4. Utilizar el atributo dangerouslySetInnerHTML para renderizar el contenido HTML.
+Criterios de Aceptación
+- Al hacer clic en una noticia, la grilla es reemplazada por la vista del artículo completo. - El contenido HTML del artículo se renderiza correctamente. 
+- No se realiza ninguna llamada de red adicional para obtener este contenido.
+
+ID
+HT-21: Integración del Componente "Hijo"
+Título
+Integrar el componente "hijo" con información de clima y finanzas.
+Descripción
+Como usuario, quiero ver información adicional relevante como el clima y datos económicos en una sección lateral en la vista de escritorio.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Crear un componente SideInfo.jsx. 
+2. Maquetar las secciones para clima, cambio de divisas, bolsa y resultados deportivos. 
+3. Por ahora, usar datos estáticos (placeholders). 
+4. Integrar este componente en el layout principal, en la sección "hija".
+Criterios de Aceptación
+- En desktop, la barra lateral es visible junto al contenido principal. 
+- En móvil, la barra lateral aparece debajo del contenido principal. 
+- La información (aunque sea estática) está maquetada y visible.
+
+ID
+HT-22: Integración de "4 Noticias más Actuales"
+Título
+Mostrar las 4 noticias más actuales debajo de la vista de detalle.
+Descripción
+Como usuario, después de leer un artículo, quiero ver una selección de las noticias más recientes para seguir navegando en el sitio.
+Responsable
+Desarrollador Frontend
+Tareas Sugeridas
+1. Crear un componente FeaturedNews.jsx. 
+2. Cuando se renderiza la vista de detalle, este componente debe hacer una llamada al endpoint api/v1/actualidad/4. 
+3. Renderizar las 4 noticias recibidas en una pequeña grilla.
+Criterios de Aceptación
+- Debajo del contenido de un artículo, se muestra una grilla con 4 noticias. 
+- Estas noticias son obtenidas del endpoint /api/v1/actualidad/4.
+
+
+
+
+
+
+
+Fase 5: Despliegue y Finalización
+ID
+HT-23: Despliegue en Vercel
+Título
+Configurar y desplegar el proyecto completo en Vercel.
+Descripción
+Como equipo de desarrollo, quiero desplegar la aplicación en Vercel para tener un entorno de producción/staging accesible y con despliegue continuo.
+Responsable
+Backend y Frontend
+Tareas Sugeridas
+1. Conectar el repositorio de Git al proyecto en Vercel. 
+2. Configurar las variables de entorno del backend en el dashboard de Vercel. 
+3. Configurar el vercel.json para que el backend de Node.js se despliegue como Serverless Functions. 
+4. Probar la aplicación desplegada de forma integral.
+Criterios de Aceptación
+- El frontend es accesible a través de la URL pública de Vercel. 
+- Las llamadas del frontend al backend (Serverless Functions) funcionan correctamente. 
+- Las variables de entorno están seguras y no expuestas en el código.
+
+ID
+HT-24: Preparación para Despliegue Manual
+Título
+Preparar los artefactos para un despliegue manual en HostGator.
+Descripción
+Como equipo de desarrollo, quiero generar los archivos y la documentación necesaria para poder desplegar el proyecto manualmente en un hosting dedicado como HostGator.
+Responsable
+Backend y Frontend
+Tareas Sugeridas
+1. Documentar los pasos para configurar un entorno Node.js en el servidor. 
+2. Crear un script de build para el frontend (next build). 
+3. Crear un script para iniciar el servidor de Node.js en producción (ej. con pm2). 
+4. Empaquetar el código del backend y las instrucciones en un archivo.
+Criterios de Aceptación
+- Se entrega un paquete (.zip o similar) con los artefactos de build. 
+- Se entrega un documento README.md con los pasos detallados para el despliegue.
+
+ID
+HT-25: Pruebas de Integración End-to-End (E2E)
+Título
+Realizar pruebas de integración E2E y QA.
+Descripción
+Como equipo de calidad, quiero realizar una revisión completa del flujo de la aplicación para asegurar que todos los componentes funcionan juntos como se espera antes del lanzamiento.
+Responsable
+Backend y Frontend
+Tareas Sugeridas
+1. Probar el flujo completo: el CronJob trae una noticia -> la API la expone -> el Frontend la muestra en la grilla -> el usuario hace clic y ve el detalle. 
+2. Validar todos los diseños responsive en diferentes navegadores y dispositivos. <br> 3. Verificar que la paginación, la navegación por categorías y los enlaces del footer funcionen.
+Criterios de Aceptación
+- Todos los flujos de usuario principales funcionan sin errores en el entorno de producción. 
+- La aplicación es funcional y visualmente correcta en Chrome, Firefox y Safari, tanto en móvil como en escritorio.
+
+ID
+HT-26: Actualización de Branding y Logos en el Portal de Noticias
+Título
+Actualizar el nombre, slogan y logos del portal "La Crónica Nacional".
+Descripción
+Como desarrollador Frontend, quiero actualizar la identidad visual del portal de noticias, incluyendo el nombre, el slogan y los logos en el encabezado, para reflejar el nuevo branding "La Crónica Nacional" y asegurar que los elementos sean responsivos.
+Responsable
+Frontend
+Tareas Sugeridas
+1. Modificar el texto del nombre del portal a "La Crónica Nacional". 
+2. Actualizar el texto del slogan a “Hechos que el poder no puede ocultar”. 
+3. Reemplazar el archivo del logo principal actual por el nuevo logo propuesto. Adjunto nombre archivo Img-Logo.png . 
+4. Añadir el nuevo "logo del slogan" en el encabezado (header) de la aplicación. Adjunto nombre archivo Img-Slogan.png. 
+5. Aplicar los estilos CSS necesarios para que el "logo del slogan" sea responsive, asegurando su correcta visualización en diferentes dispositivos (móvil, tablet y escritorio).
+6. Configurar el esquema de colores del portal de noticias con los encontrados en el logo y slogan, estos deben ser amigables al usuario.
+Criterios de Aceptación
+    • El encabezado del portal muestra el nombre "La Crónica Nacional" y el slogan “Hechos que el poder no puede ocultar”. 
+    • El logo principal del portal ha sido reemplazado por el nuevo diseño. 
+    • El logo del slogan se muestra correctamente en el encabezado. 
+    • El layout del encabezado, incluyendo el nuevo logo del slogan, se adapta y visualiza correctamente en Chrome, Firefox y Safari, tanto en vistas de escritorio como en móvil, sin solapamientos ni elementos rotos.
+    • EL color de todos los componentes debe ser compatible a nivel visual con los colores encontrados en el log y en el slogan.
+

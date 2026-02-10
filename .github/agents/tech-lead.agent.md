@@ -17,7 +17,13 @@ handoffs:
 ## Default workflow (ALWAYS)
 When a task starts, do this in order:
 
-1) Inspect repository structure, especially `product_docs/` and existing `/docs/`.
+1) Inspect repository structure, especially `product_docs/` and existing `/docs/`. 
+- Si existe `product_docs/README.md`, úsalo como índice y fuente principal para identificar:
+  - especificación principal,
+  - backlog/historias,
+  - modelo de datos (SQL),
+  - ejemplos/anexos.
+- Si `product_docs/README.md` NO existe, identifica automáticamente esos archivos explorando `product_docs/`.
 2) If the monorepo scaffold is missing, bootstrap it FIRST following the repo instructions in `.github/copilot-instructions.md`:
    - apps/web (Next.js TS, ESLint, App Router, src dir, Tailwind ONLY if required by `product_docs/` or the Kickoff issue; otherwise no Tailwind)
    - apps/api (Node.js + Express + TypeScript) with GET /health returning HealthResponse from @app/shared

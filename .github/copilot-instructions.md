@@ -6,6 +6,8 @@ This repository will implement a news website with:
 - Backend: Node.js API (TypeScript)
 - Goal: deliver ready-to-run code for FE + BE, with clear scripts, consistent conventions, and minimal assumptions.
 
+If `product_docs/` exists, it is the primary source of truth. The Kickoff issue should reference files under `product_docs/` rather than pasting large docs.
+
 If product documentation is provided, Tech Lead must convert it into:
 - /docs/architecture.md
 - /docs/api-contract.md
@@ -17,6 +19,7 @@ Frontend and Backend must implement strictly according to /docs/api-contract.md.
 ## 1) Repo structure (preferred)
 Use a monorepo layout:
 
+- /product_docs      -> product documentation (spec, backlog, SQL, examples). Source of truth for Tech Lead.
 - /apps/web         -> Next.js app (frontend)
 - /apps/api         -> Node.js API (backend)
 - /packages/shared  -> shared types (DTOs/interfaces) used by FE and BE
@@ -64,6 +67,9 @@ Each app should have:
 - Use a lightweight framework (Express or Fastify). Choose ONE and keep it consistent.
 - Provide `/health` endpoint.
 - Implement endpoints strictly from `/docs/api-contract.md`.
+- All external fetches (RSS/APIs) MUST use a timeout and fail gracefully (skip failing sources, continue processing others).
+- Deduplicate ingested articles (by url or id) before returning results.
+
 
 ### API conventions
 - All responses JSON.
@@ -96,11 +102,16 @@ Env:
 - Basic SEO:
   - set metadata (title, description) per page (at least for list/detail).
 - Data fetching must follow the contract from `/docs/api-contract.md`.
+- If a page includes interactive controls (search/filter inputs), implement it as a Client Component ("use client") and keep SSR-safe rendering for the initial load.
+
 
 UI:
-- Keep UI simple and readable.
+- Keep UI simple, readable, and polished (cards + spacing + typography).
 - Avoid heavy component libraries unless explicitly required.
-- If using Tailwind, configure it properly; otherwise stick to simple CSS modules.
+- Styling rule:
+  - Use Tailwind ONLY if the product documentation in `product_docs/` (or the Kickoff issue) explicitly requires Tailwind.
+  - Otherwise use CSS Modules.
+- Always implement loading, empty, and error states.
 
 ---
 
@@ -136,3 +147,5 @@ A feature/PR is done only if:
 - Tech Lead owns architecture + API contract in /docs.
 - Frontend and Backend do not invent endpoints or payloads.
 - If a requirement is missing/ambiguous, create a “Decision needed” note in `/docs/architecture.md` and proceed with the safest default.
+- If `product_docs/` is missing or incomplete, do NOT guess. Propose A/B options and record the decision (or pending decision) in `/docs/architecture.md`.
+

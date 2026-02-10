@@ -1,0 +1,11 @@
+{
+  "newId": "el-banco-sabadell-cierra-las-cuentas-de-2025-con-1775-millones-de-beneficio-la-opa-salvada-y-buscando-ganar-mas-clientes-en-espana.html",
+  "portalName": "El País",
+  "newTitle": "El Banco Sabadell cierra las cuentas de 2025 con 1.775 millones de beneficio, la opa salvada y buscando ganar más clientes en España",
+  "newDate": "2026-02-06T17:01:39Z",
+  "image": "https://imagenes.elpais.com/resizer/v2/WYS7NVNHWFEXDBW65SLEJLHMKE.jpg?auth=fca9999f5eb2b36e013be2f292a14d1ec8d423822fa1170738678ef365294f5a",
+  "description": "La entidad, cuyo resultado cae un 2,8%, anuncia un plan de recompra de acciones por valor de 800 millones de euros",
+  "content": "<p>El Banco Sabadell alcanzó un beneficio neto de 1.775 millones en 2025, según consta en los resultados que la entidad catalana ha publicado este viernes. El año en el que logró salvar la opa hostil que le había lanzado el BBVA resultará ser también <a href=\"https://elpais.com/economia/2026-02-05/el-banco-sabadell-releva-a-cesar-gonzalez-bueno-y-nombra-a-marc-armengol-nuevo-consejero-delegado.html\" target=\"_blank\" rel=\"noreferrer\" title=\"https://elpais.com/economia/2026-02-05/el-banco-sabadell-releva-a-cesar-gonzalez-bueno-y-nombra-a-marc-armengol-nuevo-consejero-delegado.html\">el último con César González-Bueno</a> al mando de la entidad, después de que este jueves se informara de que le sustituirá Marc Armengol en el puesto de consejero delegado. Y esa etapa se cerrará con un plan de recompra de acciones por un importe de hasta 800 millones de euros. El Banco Central Europeo ya ha dado el visto bueno a ese programa, que se activará el próximo lunes, 9 de febrero. Esta cifra se compone de 365 millones de euros con cargo a resultados de 2025, más 435 millones de euros del exceso de capital generado por encima del 13%. Las acciones de Banco Sabadell han liderado los descensos del Ibex 35 en la jornada bursátil de este viernes y han cerrado con una caída del 4,7%.</p><p><a href=\"https://elpais.com/economia/2026-02-06/el-banco-sabadell-cierra-las-cuentas-de-2025-con-1775-millones-de-beneficio-la-opa-salvada-y-buscando-ganar-mas-clientes-en-espana.html\" target=\"_blank\">Seguir leyendo</a></p>",
+  "category": "Finanzas",
+  "flag": false
+}

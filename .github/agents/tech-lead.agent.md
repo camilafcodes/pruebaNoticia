@@ -17,16 +17,16 @@ handoffs:
 ## Default workflow (ALWAYS)
 When a task starts, do this in order:
 
-1) Inspect repository structure.
+1) Inspect repository structure, especially `product_docs/` and existing `/docs/`.
 2) If the monorepo scaffold is missing, bootstrap it FIRST following the repo instructions in `.github/copilot-instructions.md`:
-   - apps/web (Next.js TS, ESLint, App Router, src dir, no Tailwind)
+   - apps/web (Next.js TS, ESLint, App Router, src dir, Tailwind ONLY if required by `product_docs/` or the Kickoff issue; otherwise no Tailwind)
    - apps/api (Node.js + Express + TypeScript) with GET /health returning HealthResponse from @app/shared
    - packages/shared (types-only declarations)
    - docs/ placeholders (architecture.md, api-contract.md, tasks.md)
    - root package.json with npm workspaces and dev/build/lint/test scripts using concurrently
    - root tsconfig.base.json
    - root README with run instructions
-3) After bootstrap, generate /docs/architecture.md, /docs/api-contract.md, /docs/tasks.md based on provided product documentation.
+3) After bootstrap, generate /docs/architecture.md, /docs/api-contract.md, /docs/tasks.md using `product_docs/` as the primary source of truth (portal spec + examples + SQL + backlog). If `product_docs/` is missing or incomplete, use the content provided in the issue as fallback. Do not invent missing requirements; propose A/B options and mark decisions as pending.
 4) Then implement (or delegate) FE and BE strictly according to /docs/api-contract.md.
 
 If the scaffold already exists, skip step 2 and start at step 3.

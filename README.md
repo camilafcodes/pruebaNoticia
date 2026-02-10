@@ -36,13 +36,35 @@ cp apps/api/.env.example apps/api/.env
 # Edit apps/api/.env and add your DATABASE_URL
 ```
 
+Example `.env`:
+```env
+PORT=8080
+NODE_ENV=development
+DATABASE_URL=postgresql://user:password@localhost:5432/news_portal
+CORS_ORIGIN=http://localhost:3000
+```
+
 **Frontend (.env.local file in apps/web/):**
 ```bash
 cp apps/web/.env.example apps/web/.env.local
 # Default API URL is already set to http://localhost:8080
 ```
 
-### 3. Run Development Servers
+### 3. Initialize Database
+
+Create the PostgreSQL database:
+```bash
+createdb news_portal
+```
+
+Run the initialization script:
+```bash
+npm run db:init --workspace=apps/api
+```
+
+This creates the `news` table and indexes.
+
+### 4. Run Development Servers
 
 **Option A: Run both frontend and backend simultaneously**
 ```bash
@@ -61,7 +83,7 @@ Terminal 2 (Frontend):
 npm run dev --workspace=apps/web
 ```
 
-### 4. Access the Application
+### 5. Access the Application
 
 - **Frontend:** http://localhost:3000
 - **Backend API:** http://localhost:8080
@@ -85,6 +107,7 @@ npm run dev --workspace=apps/api      # Start dev server with hot reload
 npm run build --workspace=apps/api    # Build TypeScript to dist/
 npm run start --workspace=apps/api    # Start production server
 npm run lint --workspace=apps/api     # Run ESLint
+npm run db:init --workspace=apps/api  # Initialize database schema
 ```
 
 ### Frontend (apps/web)

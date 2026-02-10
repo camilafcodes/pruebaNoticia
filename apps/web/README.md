@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# La Crónica Nacional - Frontend
 
-## Getting Started
+Next.js 16 application for the news portal "La Crónica Nacional".
 
-First, run the development server:
+## Features
+
+- **Server-Side Rendering (SSR)** for optimal performance and SEO
+- **Responsive Design** with Tailwind CSS
+- **Category Pages** for Actualidad, Política, Economía, Deportes, and Finanzas
+- **News Detail Pages** with full article content
+- **Pagination** for news listings
+- **Mobile Navigation** with hamburger menu
+- **Loading and Error States** for better UX
+
+## Prerequisites
+
+- Node.js 20+
+- Backend API running on `http://localhost:8080` (see `/apps/api/README.md`)
+
+## Environment Setup
+
+1. Copy the example environment file:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Update `.env.local` with your API URL (default: `http://localhost:8080`):
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8080
+```
+
+## Development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) - it will redirect to `/actualidad`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The page auto-updates as you edit files.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Build
 
-## Learn More
+Build for production:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Production
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Start the production server:
 
-## Deploy on Vercel
+```bash
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/
+│   ├── [category]/
+│   │   ├── [newId]/          # News detail pages
+│   │   ├── page.tsx           # Category list pages
+│   │   ├── loading.tsx        # Loading state
+│   │   └── error.tsx          # Error state
+│   ├── layout.tsx             # Root layout with Header, Nav, Footer
+│   ├── page.tsx               # Home (redirects to /actualidad)
+│   └── globals.css            # Global styles
+├── components/
+│   ├── layout/
+│   │   ├── Header.tsx         # Logo, slogan, date
+│   │   ├── Navigation.tsx     # Category navigation
+│   │   └── Footer.tsx         # Social links, copyright
+│   └── news/
+│       ├── NewsCard.tsx       # News item card
+│       └── NewsGrid.tsx       # Grid with pagination
+└── lib/
+    └── api.ts                 # API client utilities
+```
+
+## Pages
+
+- `/` - Redirects to `/actualidad`
+- `/[category]` - List of news by category (actualidad, politica, economia, deportes, finanzas)
+- `/[category]/[newId]` - News detail page
+
+## API Integration
+
+The frontend communicates with the backend API defined in `/docs/api-contract.md`:
+
+- `GET /api/v1/{category}?page=1&pageSize=10` - Paginated news by category
+- `GET /api/v1/actualidad/4` - Top 4 actualidad news
+
+All API calls are server-side by default for better SEO and performance.
+
+## Styling
+
+- **Tailwind CSS** for utility-first styling
+- Custom prose styles for article content rendering
+- Responsive breakpoints: mobile, tablet, desktop
+
+## Notes
+
+- Make sure the backend API is running before starting the frontend
+- The backend must have data in the database for news to display
+- See `/README.md` (root) for full project setup instructions

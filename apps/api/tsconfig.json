@@ -2,13 +2,22 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": ".",
     "module": "commonjs",
     "target": "ES2020",
     "esModuleInterop": true,
     "baseUrl": ".",
+    "types": [
+      "node"
+    ],
     "paths": {
-      "@app/shared": ["../../packages/shared/src"]
+      "@app/shared": [
+        "../../packages/shared/src"
+      ]
     }
   },
-  "include": ["src/**/*", "../../packages/shared/src/**/*"]
+  "include": [
+    "src/**/*",
+    "../../packages/shared/src/**/*"
+  ]
 }

@@ -16,11 +16,25 @@ This is a monorepo containing:
 
 - Node.js 20+ 
 - npm 9+
-- PostgreSQL 14+ (for backend)
+- Podman or Docker (for database)
 
 ## Quick Start
 
-### 1. Install Dependencies
+### 1. Set Up Database with Podman
+
+The easiest way to set up the PostgreSQL database is using Podman:
+
+```bash
+./setup-db.sh
+```
+
+This will create and initialize the PostgreSQL database in a container with all the required schema.
+
+For detailed database setup instructions, see [DATABASE_SETUP.md](DATABASE_SETUP.md).
+
+**Alternative:** If you prefer to use a local PostgreSQL installation, see the manual setup instructions in [DATABASE_SETUP.md](DATABASE_SETUP.md).
+
+### 2. Install Dependencies
 
 ```bash
 npm install
@@ -28,7 +42,7 @@ npm install
 
 This will install dependencies for all workspaces (root, apps/web, apps/api, packages/shared).
 
-### 2. Set Up Environment Variables
+### 3. Set Up Environment Variables
 
 **Backend (.env file in apps/api/):**
 ```bash
@@ -36,11 +50,11 @@ cp apps/api/.env.example apps/api/.env
 # Edit apps/api/.env and add your DATABASE_URL
 ```
 
-Example `.env`:
+Example `.env` (if using Podman setup):
 ```env
 PORT=8080
 NODE_ENV=development
-DATABASE_URL=postgresql://user:password@localhost:5432/news_portal
+DATABASE_URL=postgresql://postgres:postgres123@localhost:5432/news_portal
 CORS_ORIGIN=http://localhost:3000
 ```
 
@@ -50,21 +64,9 @@ cp apps/web/.env.example apps/web/.env.local
 # Default API URL is already set to http://localhost:8080
 ```
 
-### 3. Initialize Database
-
-Create the PostgreSQL database:
-```bash
-createdb news_portal
-```
-
-Run the initialization script:
-```bash
-npm run db:init --workspace=apps/api
-```
-
-This creates the `news` table and indexes.
-
 ### 4. Run Development Servers
+
+**Note:** If you used the Podman setup, the database is already initialized and you can skip manual database initialization steps.
 
 **Option A: Run both frontend and backend simultaneously**
 ```bash

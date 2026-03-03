@@ -21,7 +21,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="bg-gray-900 text-white">
+    <nav className="bg-red-900 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="hidden md:flex md:space-x-8 md:mx-auto">
@@ -31,8 +31,8 @@ export default function Navigation() {
                 href={`/${category.slug}`}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive(category.slug)
-                    ? 'bg-gray-700 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    ? 'bg-red-700 text-white'
+                    : 'text-red-100 hover:bg-red-800 hover:text-white'
                 }`}
               >
                 {category.name}
@@ -41,7 +41,7 @@ export default function Navigation() {
           </div>
 
           <button
-            className="md:hidden p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800"
+            className="md:hidden p-2 rounded-md text-red-100 hover:text-white hover:bg-red-800"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -78,8 +78,8 @@ export default function Navigation() {
                 href={`/${category.slug}`}
                 className={`block px-3 py-2 rounded-md text-base font-medium ${
                   isActive(category.slug)
-                    ? 'bg-gray-700 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    ? 'bg-red-700 text-white'
+                    : 'text-red-100 hover:bg-red-800 hover:text-white'
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >

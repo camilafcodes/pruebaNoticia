@@ -55,6 +55,12 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     throw new Error('News item not found');
   }
 
+  // Función para limpiar HTML tags
+  const cleanDescription = (html: string | undefined): string => {
+    if (!html) return '';
+    return html.replace(/<[^>]*>/g, '').trim();
+  };
+
   const formattedDate = new Date(newsItem.newDate).toLocaleDateString('es-CO', {
     year: 'numeric',
     month: 'long',
@@ -115,7 +121,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
           {newsItem.description && (
             <p className="text-xl text-gray-700 mb-6 font-medium">
-              {newsItem.description}
+              {cleanDescription(newsItem.description)}
             </p>
           )}
 

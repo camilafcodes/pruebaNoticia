@@ -12,6 +12,12 @@ export default function NewsCard({ news }: NewsCardProps) {
     day: 'numeric',
   });
 
+  // Función para limpiar HTML tags de la descripción
+  const cleanDescription = (html: string | undefined): string => {
+    if (!html) return '';
+    return html.replace(/<[^>]*>/g, '').trim();
+  };
+
   return (
     <Link
       href={`/${news.category}/${news.newId}`}
@@ -36,7 +42,7 @@ export default function NewsCard({ news }: NewsCardProps) {
         </h3>
         {news.description && (
           <p className="text-sm text-gray-600 line-clamp-3 mb-2">
-            {news.description}
+            {cleanDescription(news.description)}
           </p>
         )}
         <p className="text-xs text-gray-400">{formattedDate}</p>

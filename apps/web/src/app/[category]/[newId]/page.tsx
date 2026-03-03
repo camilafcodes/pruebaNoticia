@@ -22,7 +22,7 @@ export async function generateMetadata({
   const { category, newId } = await params;
   
   try {
-    const response = await fetchNewsByCategory(category, 1, 100);
+    const response = await fetchNewsByCategory(category, 1, 50);
     const newsItem = response.data.find((item) => item.newId === newId);
 
     if (newsItem) {
@@ -45,7 +45,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const { category, newId } = await params;
 
   const [newsResponse, top4Response] = await Promise.all([
-    fetchNewsByCategory(category, 1, 100),
+    fetchNewsByCategory(category, 1, 50),
     fetchTop4Actualidad(),
   ]);
 

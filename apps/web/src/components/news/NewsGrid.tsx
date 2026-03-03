@@ -71,9 +71,9 @@ export default function NewsGrid({
                 <button
                   key={pageNum}
                   onClick={() => handlePageChange(pageNum)}
-                  className={`px-3 py-2 border rounded-md text-sm font-medium ${
+                  className={`px-3 py-2 border rounded-md text-sm font-medium transition-colors ${
                     currentPage === pageNum
-                      ? 'bg-gray-900 text-white border-gray-900'
+                      ? 'bg-red-800 text-white border-red-800 hover:bg-red-700'
                       : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                   }`}
                 >

@@ -22,7 +22,7 @@ export default function Header() {
               </time>
               
               {/* Título centrado en su espacio */}
-              <div className="flex-1 flex flex-col justify-center items-center w-full space-y-3">
+              <div className="flex-1 flex flex-col justify-center items-center w-full space-y-2 lg:ml-5">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center leading-tight tracking-tight">
                   La Crónica Nacional
                 </h1>
@@ -43,14 +43,14 @@ export default function Header() {
 
             {/* Columna derecha: Logo principal grande */}
             <div className="lg:col-span-4 flex justify-center lg:justify-end">
-              <div className="relative w-56 h-36 sm:w-64 sm:h-44 md:w-72 md:h-48 lg:w-80 lg:h-56">
+              <div className="relative w-72 h-48 sm:w-80 sm:h-56 md:w-[22rem] md:h-60 lg:w-[26rem] lg:h-[17rem] -mt-3 lg:-mt-6 lg:-mr-4">
                 <Image
                   src="/logo.jpeg"
                   alt="La Crónica Nacional - Logo"
                   fill
                   className="object-contain"
                   priority
-                  sizes="(max-width: 640px) 224px, (max-width: 768px) 256px, (max-width: 1024px) 288px, 320px"
+                  sizes="(max-width: 640px) 288px, (max-width: 768px) 320px, (max-width: 1024px) 352px, 416px"
                 />
               </div>
             </div>

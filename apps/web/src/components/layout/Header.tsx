@@ -27,17 +27,10 @@ export default function Header() {
                   La Crónica Nacional
                 </h1>
                 
-                {/* Logo del Slogan sin fondo - centrado debajo del título */}
-                <div className="relative w-64 h-11 sm:w-80 sm:h-14 md:w-[22rem] md:h-16 lg:w-[26rem] lg:h-[4.5rem]">
-                  <Image
-                    src="/slogan-sinfondo.png"
-                    alt="Hechos que el poder no puede ocultar"
-                    fill
-                    className="object-contain"
-                    priority
-                    sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, (max-width: 1024px) 352px, 416px"
-                  />
-                </div>
+                {/* Slogan en texto */}
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-red-100 italic text-center font-light">
+                  Hechos que el poder no puede ocultar
+                </p>
               </div>
             </div>
 

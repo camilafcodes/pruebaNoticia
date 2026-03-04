@@ -22,13 +22,24 @@ export default function Header() {
               </time>
               
               {/* Título centrado en su espacio */}
-              <div className="flex-1 flex flex-col justify-center items-center w-full space-y-2 lg:ml-5">
+              <div className="flex-1 flex flex-col justify-center items-center w-full space-y-1 lg:ml-5">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center leading-tight tracking-tight">
                   La Crónica Nacional
                 </h1>
                 
+                {/* Miniatura Logo */}
+                <div className="relative w-24 h-14 sm:w-28 sm:h-16">
+                  <Image
+                    src="/miniaturaLogo.png"
+                    alt="Logo miniatura"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 640px) 96px, 112px"
+                  />
+                </div>
+                
                 {/* Slogan en texto */}
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-red-100 italic text-center font-light">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-red-100 italic text-center font-light">
                   Hechos que el poder no puede ocultar
                 </p>
               </div>

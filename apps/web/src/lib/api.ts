@@ -49,7 +49,7 @@ async function fetchAPI<T>(endpoint: string): Promise<T> {
 export async function fetchNewsByCategory(
   category: string,
   page: number = 1,
-  pageSize: number = 10
+  pageSize: number = 9
 ): Promise<PaginatedNewsResponse> {
   return fetchAPI<PaginatedNewsResponse>(
     `/api/v1/${category}?page=${page}&pageSize=${pageSize}`

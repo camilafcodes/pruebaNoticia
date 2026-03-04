@@ -48,7 +48,7 @@ export default async function CategoryPage({
   }
 
   const page = pageParam ? parseInt(pageParam) : 1;
-  const response = await fetchNewsByCategory(category, page, 10);
+  const response = await fetchNewsByCategory(category, page, 9);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -49,6 +49,16 @@ export const fetchQhuboCaliNews = async (): Promise<NewsItem[]> => {
 };
 
 const extractImageFromContent = (content: string): string | null => {
+  // Primero intentar obtener la imagen principal del div post-thumbnail
+  const thumbnailMatch = content.match(/<div class="post-thumbnail"[^>]*>(.*?)<\/div>/s);
+  if (thumbnailMatch) {
+    const imgMatch = thumbnailMatch[1].match(/<img[^>]+src="([^">]+)"/);
+    if (imgMatch) {
+      return imgMatch[1];
+    }
+  }
+  
+  // Fallback: buscar cualquier imagen en el contenido
   const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
   return imgMatch ? imgMatch[1] : null;
 };

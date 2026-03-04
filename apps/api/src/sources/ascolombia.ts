@@ -12,13 +12,14 @@ const parser = new Parser({
     item: [
       ['content:encoded', 'contentEncoded'],
       ['description', 'description'],
+      ['media:content', 'mediaContent'],
     ],
   },
 });
 
-export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
-  const RSS_URL = 'https://www.futbolred.com/rss';
-  const PORTAL_NAME = 'Futbolred';
+export const fetchAsColombiaNews = async (): Promise<NewsItem[]> => {
+  const RSS_URL = 'https://as.com/rss/deportes/futbol.xml';
+  const PORTAL_NAME = 'AS Deportes';
   const CATEGORY = 'deportes';
 
   try {
@@ -32,12 +33,22 @@ export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
       const content = item.contentEncoded || item.content || item.description || '';
       const description = item.description || '';
 
+      // Extract image from media:content or enclosure
+      let image: string | undefined;
+      if (item.enclosure?.url) {
+        image = item.enclosure.url;
+      } else if ((item as any).mediaContent?.$ ?.url) {
+        image = (item as any).mediaContent.$.url;
+      } else {
+        image = extractImageFromContent(content);
+      }
+
       newsItems.push({
         newId,
         portalName: PORTAL_NAME,
         newTitle: item.title,
         newDate: item.pubDate || item.isoDate || new Date().toISOString(),
-        image: extractImageFromContent(content) || undefined,
+        image: image || undefined,
         description: truncateDescription(description),
         content: cleanHtmlContent(content),
         category: CATEGORY,
@@ -52,7 +63,8 @@ export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
   }
 };
 
-const extractImageFromContent = (content: string): string | null => {
-  const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
-  return imgMatch ? imgMatch[1] : null;
-};
+function extractImageFromContent(html: string): string | null {
+  const imgRegex = /<img[^>]+src="([^">]+)"/i;
+  const match = html.match(imgRegex);
+  return match ? match[1] : null;
+}

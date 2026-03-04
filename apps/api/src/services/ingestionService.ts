@@ -4,6 +4,7 @@ import { fetchInfobaeNews } from '../sources/infobae';
 import { fetchValoraAnalitikNews } from '../sources/valoraanalitik';
 import { fetchFutbolredNews } from '../sources/futbolred';
 import { fetchElPaisNews } from '../sources/elpais';
+import { fetchAsColombiaNews } from '../sources/ascolombia';
 
 export const ingestAllNews = async (): Promise<void> => {
   console.log('Starting news ingestion...');
@@ -14,6 +15,7 @@ export const ingestAllNews = async (): Promise<void> => {
     { name: 'Infobae', fetch: fetchInfobaeNews },
     { name: 'Valora Analitik', fetch: fetchValoraAnalitikNews },
     { name: 'Futbolred', fetch: fetchFutbolredNews },
+    { name: 'AS Colombia', fetch: fetchAsColombiaNews },
     { name: 'El País', fetch: fetchElPaisNews },
   ];
 

@@ -12,13 +12,14 @@ const parser = new Parser({
     item: [
       ['content:encoded', 'contentEncoded'],
       ['description', 'description'],
+      ['enclosure', 'enclosure'],
     ],
   },
 });
 
 export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
-  const RSS_URL = 'https://columnadigital.com/category/deportes/feed/gn';
-  const PORTAL_NAME = 'Columna Digital';
+  const RSS_URL = 'https://www.eltiempo.com/rss/deportes.xml';
+  const PORTAL_NAME = 'El Tiempo';
   const CATEGORY = 'deportes';
 
   try {
@@ -31,13 +32,16 @@ export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
       const newId = extractNewIdFromUrl(item.link);
       const content = item.contentEncoded || item.content || item.description || '';
       const description = item.description || '';
+      
+      // Extraer imagen del enclosure (El Tiempo usa enclosure para imágenes)
+      const image = extractImageFromItem(item);
 
       newsItems.push({
         newId,
         portalName: PORTAL_NAME,
         newTitle: item.title,
         newDate: item.pubDate || item.isoDate || new Date().toISOString(),
-        image: undefined, // Columna Digital tiene protección anti-hotlinking, no usar imágenes
+        image: image || undefined,
         description: truncateDescription(description),
         content: cleanHtmlContent(content),
         category: CATEGORY,
@@ -52,7 +56,14 @@ export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
   }
 };
 
-const extractImageFromContent = (content: string): string | null => {
-  const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
+const extractImageFromItem = (item: any): string | null => {
+  // Primero intentar con enclosure (El Tiempo usa esto)
+  if (item.enclosure && item.enclosure.url) {
+    return item.enclosure.url;
+  }
+  
+  // Fallback: buscar img tag en el contenido
+  const content = item.contentEncoded || item.content || item.description || '';
+  const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/);
   return imgMatch ? imgMatch[1] : null;
 };

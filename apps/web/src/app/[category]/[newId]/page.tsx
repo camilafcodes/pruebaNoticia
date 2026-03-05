@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { fetchNewsByCategory, fetchTop4Actualidad } from '@/lib/api';
 import NewsCard from '@/components/news/NewsCard';
 import FinancialIndicatorsSidebar from '@/components/indicators/FinancialIndicatorsSidebar';
+import SportsScores from '@/components/sports/SportsScores';
 import Link from 'next/link';
 import { Category } from '@app/shared';
 
@@ -141,6 +142,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         {/* Sidebar - 30% */}
         <div className="lg:col-span-3">
           <FinancialIndicatorsSidebar />
+          <SportsScores />
         </div>
       </div>
 

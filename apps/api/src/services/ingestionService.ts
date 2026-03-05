@@ -13,7 +13,7 @@ export const ingestAllNews = async (): Promise<void> => {
     { name: "Q'hubo Cali", fetch: fetchQhuboCaliNews },
     { name: 'Infobae', fetch: fetchInfobaeNews },
     { name: 'Valora Analitik', fetch: fetchValoraAnalitikNews },
-    { name: 'Columna Digital', fetch: fetchFutbolredNews },
+    { name: 'El Tiempo', fetch: fetchFutbolredNews },
     { name: 'El País', fetch: fetchElPaisNews },
   ];
 

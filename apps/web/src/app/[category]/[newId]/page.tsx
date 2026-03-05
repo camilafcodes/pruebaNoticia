@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { fetchNewsByCategory, fetchTop4Actualidad } from '@/lib/api';
 import NewsCard from '@/components/news/NewsCard';
+import FinancialIndicatorsSidebar from '@/components/indicators/FinancialIndicatorsSidebar';
 import Link from 'next/link';
 import { Category } from '@app/shared';
 
@@ -91,46 +92,57 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         Volver a {categoryNames[category as Category]}
       </Link>
 
-      <article className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-        <div className="p-6 lg:p-8">
-          <div className="mb-4">
-            <span className="inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-900 rounded-full uppercase">
-              {categoryNames[category as Category]}
-            </span>
-          </div>
+      {/* Layout de 2 columnas: 70% contenido + 30% sidebar */}
+      <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 mb-8">
+        {/* Columna principal - 70% */}
+        <div className="lg:col-span-7">
+          <article className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="p-6 lg:p-8">
+              <div className="mb-4">
+                <span className="inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-900 rounded-full uppercase">
+                  {categoryNames[category as Category]}
+                </span>
+              </div>
 
-          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-            {newsItem.newTitle}
-          </h1>
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                {newsItem.newTitle}
+              </h1>
 
-          <div className="flex items-center text-sm text-gray-600 mb-6">
-            <span className="font-medium">{newsItem.portalName}</span>
-            <span className="mx-2">•</span>
-            <time dateTime={newsItem.newDate}>{formattedDate}</time>
-          </div>
+              <div className="flex items-center text-sm text-gray-600 mb-6">
+                <span className="font-medium">{newsItem.portalName}</span>
+                <span className="mx-2">•</span>
+                <time dateTime={newsItem.newDate}>{formattedDate}</time>
+              </div>
 
-          {newsItem.image && (
-            <div className="mb-6">
-              <img
-                src={newsItem.image}
-                alt={newsItem.newTitle}
-                className="w-full h-auto rounded-lg"
+              {newsItem.image && (
+                <div className="mb-6">
+                  <img
+                    src={newsItem.image}
+                    alt={newsItem.newTitle}
+                    className="w-full h-auto rounded-lg"
+                  />
+                </div>
+              )}
+
+              {newsItem.description && (
+                <p className="text-xl text-gray-700 mb-6 font-medium">
+                  {cleanDescription(newsItem.description)}
+                </p>
+              )}
+
+              <div
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: newsItem.content }}
               />
             </div>
-          )}
-
-          {newsItem.description && (
-            <p className="text-xl text-gray-700 mb-6 font-medium">
-              {cleanDescription(newsItem.description)}
-            </p>
-          )}
-
-          <div
-            className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: newsItem.content }}
-          />
+          </article>
         </div>
-      </article>
+
+        {/* Sidebar - 30% */}
+        <div className="lg:col-span-3">
+          <FinancialIndicatorsSidebar />
+        </div>
+      </div>
 
       <section>
         <h2 className="text-2xl font-bold text-gray-900 mb-6">

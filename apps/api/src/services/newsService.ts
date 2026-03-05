@@ -121,3 +121,19 @@ export const newsExists = async (newId: string): Promise<boolean> => {
     throw error;
   }
 };
+
+export const updateFlaggedActualidadDates = async (): Promise<number> => {
+  const query = `
+    UPDATE news
+    SET "newDate" = NOW()
+    WHERE category = 'actualidad' AND flag = true
+  `;
+  
+  try {
+    const result = await pool.query(query);
+    return result.rowCount || 0;
+  } catch (error) {
+    console.error('Error updating flagged actualidad dates:', error);
+    throw error;
+  }
+};

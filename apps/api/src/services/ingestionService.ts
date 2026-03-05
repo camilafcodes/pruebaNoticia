@@ -1,4 +1,4 @@
-import { insertNews, newsExists } from './newsService';
+import { insertNews, newsExists, updateFlaggedActualidadDates } from './newsService';
 import { fetchQhuboCaliNews } from '../sources/qhubocali';
 import { fetchInfobaeNews } from '../sources/infobae';
 import { fetchValoraAnalitikNews } from '../sources/valoraanalitik';
@@ -51,7 +51,15 @@ export const ingestAllNews = async (): Promise<void> => {
       console.error(`Failed to fetch news from ${source.name}:`, error);
     }
   }
-
+  // Actualizar fecha de noticias destacadas de Actualidad (HT-11)
+  try {
+    const updated = await updateFlaggedActualidadDates();
+    if (updated > 0) {
+      console.log(`Updated ${updated} flagged actualidad news to current date`);
+    }
+  } catch (error) {
+    console.error('Error updating flagged actualidad dates:', error);
+  }
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);
   console.log(`News ingestion completed in ${duration}s. Total: ${totalIngested} ingested, ${totalSkipped} skipped`);
 };

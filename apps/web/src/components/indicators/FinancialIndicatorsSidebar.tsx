@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 
 interface Indicators {
-  usdCop: number | null;
-  eurCop: number | null;
-  btcUsd: number | null;
+  usdCop: any;
+  eurCop: any;
+  btcUsd: any;
   loading: boolean;
   error: string | null;
 }

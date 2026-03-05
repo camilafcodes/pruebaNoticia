@@ -35,6 +35,13 @@ export const extractNewIdFromUrl = (url: string): string => {
       }
     }
     
+    if (url.includes('columnadigital.com')) {
+      const parts = urlObj.pathname.split('/').filter(Boolean);
+      if (parts.length > 0) {
+        return `columna-${parts[parts.length - 1]}`;
+      }
+    }
+    
     const lastPart = urlObj.pathname.split('/').filter(Boolean).pop() || 'unknown';
     return lastPart.replace(/\.html?$/, '');
   } catch (error) {

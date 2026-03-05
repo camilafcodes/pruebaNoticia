@@ -8,11 +8,11 @@ export const getNewsByCategory = async (
 ): Promise<{ data: NewsItem[]; total: number }> => {
   const offset = (page - 1) * pageSize;
 
-  const countQuery = 'SELECT COUNT(*) FROM news WHERE category = $1';
+  const countQuery = 'SELECT COUNT(*) FROM news WHERE category = $1 AND image IS NOT NULL';
   const dataQuery = `
     SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag
     FROM news
-    WHERE category = $1
+    WHERE category = $1 AND image IS NOT NULL
     ORDER BY "newDate" DESC
     LIMIT $2 OFFSET $3
   `;
@@ -47,7 +47,7 @@ export const getTop4Actualidad = async (): Promise<NewsItem[]> => {
     (
       SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, 1 as priority
       FROM news
-      WHERE category = 'actualidad' AND flag = true
+      WHERE category = 'actualidad' AND flag = true AND image IS NOT NULL
       ORDER BY "newDate" DESC
       LIMIT 4
     )
@@ -55,7 +55,7 @@ export const getTop4Actualidad = async (): Promise<NewsItem[]> => {
     (
       SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, 2 as priority
       FROM news
-      WHERE category = 'actualidad'
+      WHERE category = 'actualidad' AND image IS NOT NULL
       ORDER BY "newDate" DESC
       LIMIT 4
     )

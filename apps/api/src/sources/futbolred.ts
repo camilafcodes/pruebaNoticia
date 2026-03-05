@@ -17,8 +17,8 @@ const parser = new Parser({
 });
 
 export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
-  const RSS_URL = 'https://www.futbolred.com/rss';
-  const PORTAL_NAME = 'Futbolred';
+  const RSS_URL = 'https://columnadigital.com/category/deportes/feed/gn';
+  const PORTAL_NAME = 'Columna Digital';
   const CATEGORY = 'deportes';
 
   try {
@@ -37,7 +37,7 @@ export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
         portalName: PORTAL_NAME,
         newTitle: item.title,
         newDate: item.pubDate || item.isoDate || new Date().toISOString(),
-        image: extractImageFromContent(content) || undefined,
+        image: undefined, // Columna Digital tiene protección anti-hotlinking, no usar imágenes
         description: truncateDescription(description),
         content: cleanHtmlContent(content),
         category: CATEGORY,

@@ -41,6 +41,9 @@ export default function FinancialIndicators() {
         }
       } catch (error) {
         console.error('Error fetching exchange rates:', error);
+        // Mantener valores anteriores si falló
+        usdCop = indicators.usdCop;
+        eurCop = indicators.eurCop;
       }
 
       // Obtener Bitcoin/USD desde CoinGecko
@@ -49,6 +52,11 @@ export default function FinancialIndicators() {
           'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd',
           { cache: 'no-store' }
         );
+        
+        if (!btcResponse.ok) {
+          throw new Error(`HTTP ${btcResponse.status}`);
+        }
+        
         const btcData = await btcResponse.json();
         
         if (btcData.bitcoin?.usd) {
@@ -56,6 +64,8 @@ export default function FinancialIndicators() {
         }
       } catch (error) {
         console.error('Error fetching Bitcoin price:', error);
+        // Mantener valor anterior si falló (rate limiting)
+        btcUsd = indicators.btcUsd;
       }
 
       setIndicators({
@@ -68,8 +78,8 @@ export default function FinancialIndicators() {
     };
 
     fetchIndicators();
-    // Actualizar cada 5 minutos
-    const interval = setInterval(fetchIndicators, 5 * 60 * 1000);
+    // Actualizar cada 10 minutos (evitar rate limiting de CoinGecko)
+    const interval = setInterval(fetchIndicators, 10 * 60 * 1000);
     
     return () => clearInterval(interval);
   }, []);

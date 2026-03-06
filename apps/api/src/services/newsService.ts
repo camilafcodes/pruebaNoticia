@@ -55,7 +55,7 @@ export const getTop4Actualidad = async (): Promise<NewsItem[]> => {
     (
       SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, 2 as priority
       FROM news
-      WHERE category = 'actualidad' AND image IS NOT NULL
+      WHERE category = 'actualidad' AND flag = false AND image IS NOT NULL
       ORDER BY "newDate" DESC
       LIMIT 4
     )

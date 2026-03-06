@@ -4,17 +4,22 @@ import { extractNewIdFromUrl, cleanHtmlContent, truncateDescription } from '../u
 
 const parser = new Parser({
   timeout: 10000,
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'application/rss+xml, application/xml, text/xml, */*'
+  },
   customFields: {
     item: [
       ['content:encoded', 'contentEncoded'],
       ['description', 'description'],
+      ['enclosure', 'enclosure'],
     ],
   },
 });
 
 export const fetchQhuboCaliNews = async (): Promise<NewsItem[]> => {
-  const RSS_URL = 'https://www.qhubocali.com/feed/';
-  const PORTAL_NAME = "Q'hubo Cali";
+  const RSS_URL = 'https://www.eltiempo.com/rss/ultimas-noticias.xml';
+  const PORTAL_NAME = 'El Tiempo';
   const CATEGORY = 'actualidad';
 
   try {
@@ -27,13 +32,16 @@ export const fetchQhuboCaliNews = async (): Promise<NewsItem[]> => {
       const newId = extractNewIdFromUrl(item.link);
       const content = item.contentEncoded || item.content || item.description || '';
       const description = item.description || '';
+      
+      // Extraer imagen del enclosure (El Tiempo usa enclosure para imágenes)
+      const image = extractImageFromItem(item);
 
       newsItems.push({
         newId,
         portalName: PORTAL_NAME,
         newTitle: item.title,
         newDate: item.pubDate || item.isoDate || new Date().toISOString(),
-        image: extractImageFromContent(content) || undefined,
+        image: image || undefined,
         description: truncateDescription(description),
         content: cleanHtmlContent(content),
         category: CATEGORY,
@@ -48,17 +56,14 @@ export const fetchQhuboCaliNews = async (): Promise<NewsItem[]> => {
   }
 };
 
-const extractImageFromContent = (content: string): string | null => {
-  // Primero intentar obtener la imagen principal del div post-thumbnail
-  const thumbnailMatch = content.match(/<div class="post-thumbnail"[^>]*>(.*?)<\/div>/s);
-  if (thumbnailMatch) {
-    const imgMatch = thumbnailMatch[1].match(/<img[^>]+src="([^">]+)"/);
-    if (imgMatch) {
-      return imgMatch[1];
-    }
+const extractImageFromItem = (item: any): string | null => {
+  // Primero intentar con enclosure (El Tiempo usa esto)
+  if (item.enclosure && item.enclosure.url) {
+    return item.enclosure.url;
   }
   
-  // Fallback: buscar cualquier imagen en el contenido
-  const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
+  // Fallback: buscar img tag en el contenido
+  const content = item.contentEncoded || item.content || item.description || '';
+  const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/);
   return imgMatch ? imgMatch[1] : null;
 };

@@ -24,7 +24,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 py-2 lg:py-3 items-center">
             {/* Columna izquierda: Título + Slogan (centrados) */}
-            <div className="lg:col-span-8 flex flex-col items-center lg:items-start space-y-2 lg:pr-8 pt-8">
+            <div className="lg:col-span-8 flex flex-col items-center lg:items-start space-y-2 lg:pr-8 pt-14 sm:pt-12 lg:pt-8">
               {/* Título centrado en su espacio */}
               <div className="flex-1 flex flex-col justify-center items-center w-full space-y-1 lg:ml-5">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center leading-tight tracking-tight">

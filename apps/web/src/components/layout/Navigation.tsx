@@ -24,13 +24,13 @@ export default function Navigation() {
     <nav className="bg-red-800 border-b border-red-700 shadow-md sticky top-0 z-40">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Desktop Navigation - tabs horizontales */}
-        <div className="hidden md:flex md:items-center md:justify-center md:space-x-1 h-14">
+        <div className="hidden md:flex md:items-center md:justify-center md:space-x-4 h-14">
           {categories.map((category) => (
             <Link
               key={category.slug}
               href={`/${category.slug}`}
               className={`
-                relative px-5 py-4 text-sm font-semibold uppercase tracking-wide
+                relative px-6 py-4 text-lg font-semibold uppercase tracking-wide
                 transition-all duration-200
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-red-800
                 ${

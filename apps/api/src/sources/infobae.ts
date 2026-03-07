@@ -16,7 +16,7 @@ const parser = new Parser({
 export const fetchInfobaeNews = async (): Promise<NewsItem[]> => {
   const RSS_URL = 'https://www.infobae.com/arc/outboundfeeds/rss/category/colombia/';
   const PORTAL_NAME = 'Infobae';
-  const CATEGORY = 'politica';
+  const CATEGORY = 'actualidad';
 
   try {
     const feed = await parser.parseURL(RSS_URL);

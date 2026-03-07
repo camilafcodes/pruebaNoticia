@@ -1,6 +1,6 @@
 import Parser from 'rss-parser';
 import { NewsItem } from '@app/shared';
-import { extractNewIdFromUrl, cleanHtmlContent, truncateDescription } from '../utils/rssUtils';
+import { extractNewIdFromUrl, cleanHtmlContent, truncateDescription, removeFirstImageTag } from '../utils/rssUtils';
 
 const parser = new Parser({
   timeout: 10000,
@@ -26,17 +26,22 @@ export const fetchInfobaeNews = async (): Promise<NewsItem[]> => {
       if (!item.link || !item.title) continue;
 
       const newId = extractNewIdFromUrl(item.link);
-      const content = item.contentEncoded || item.content || item.description || '';
+      const rawContent = item.contentEncoded || item.content || item.description || '';
       const description = item.description || '';
+      const image = extractImageFromItem(item);
+      
+      // Remover primer tag de imagen del contenido para evitar duplicación
+      const contentWithoutFirstImage = removeFirstImageTag(rawContent);
+      const cleanedContent = cleanHtmlContent(contentWithoutFirstImage);
 
       newsItems.push({
         newId,
         portalName: PORTAL_NAME,
         newTitle: item.title,
         newDate: item.pubDate || item.isoDate || new Date().toISOString(),
-        image: extractImageFromItem(item) || undefined,
+        image: image || undefined,
         description: truncateDescription(description),
-        content: cleanHtmlContent(content),
+        content: cleanedContent,
         category: CATEGORY,
         flag: false,
       });

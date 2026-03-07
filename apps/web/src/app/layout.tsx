@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import { LocaleProvider } from "@/i18n/LocaleProvider";
 
 export const metadata: Metadata = {
   title: "La Crónica Nacional",
@@ -17,12 +18,14 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className="antialiased flex flex-col min-h-screen">
-        <Header />
-        <Navigation />
-        <main className="flex-1 bg-gray-50">
-          {children}
-        </main>
-        <Footer />
+        <LocaleProvider>
+          <Header />
+          <Navigation />
+          <main className="flex-1 bg-gray-50">
+            {children}
+          </main>
+          <Footer />
+        </LocaleProvider>
       </body>
     </html>
   );

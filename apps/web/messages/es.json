@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "actualidad": "Actualidad",
+    "politica": "Política",
+    "economia": "Economía",
+    "deportes": "Deportes",
+    "finanzas": "Finanzas"
+  },
+  "navigation": {
+    "siteTitle": "La Crónica Nacional",
+    "backTo": "Volver a"
+  },
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "messages": {
+    "noNews": "No hay noticias disponibles en esta categoría.",
+    "loadingIndicators": "Cargando indicadores...",
+    "readMore": "Seguir leyendo",
+    "latestNews": "Últimas Noticias de Actualidad"
+  },
+  "indicators": {
+    "title": "Indicadores Financieros",
+    "usdCop": "USD/COP",
+    "eurCop": "EUR/COP",
+    "btcUsd": "Bitcoin/USD"
+  },
+  "metadata": {
+    "newsIn": "Últimas noticias de",
+    "siteTitle": "La Crónica Nacional",
+    "siteDescription": "Hechos que el poder no puede ocultar",
+    "newsTitle": "Noticia"
+  },
+  "footer": {
+    "copyright": "Todos los derechos reservados"
+  }
+}

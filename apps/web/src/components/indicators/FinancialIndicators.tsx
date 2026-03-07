@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface Indicators {
   usdCop: any;
@@ -11,6 +12,8 @@ interface Indicators {
 }
 
 export default function FinancialIndicators() {
+  const t = useTranslations('messages');
+  const tIndicators = useTranslations('indicators');
   const [indicators, setIndicators] = useState<Indicators>({
     usdCop: null,
     eurCop: null,
@@ -88,7 +91,7 @@ export default function FinancialIndicators() {
     return (
       <div className="bg-gradient-to-r from-red-900 to-red-950 text-white py-3 mb-6 rounded-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <p className="text-sm text-center animate-pulse">Cargando indicadores...</p>
+          <p className="text-sm text-center animate-pulse">{t('loadingIndicators')}</p>
         </div>
       </div>
     );
@@ -104,19 +107,19 @@ export default function FinancialIndicators() {
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 text-sm sm:text-base">
           {indicators.usdCop && (
             <div className="flex items-center space-x-2">
-              <span className="font-semibold">USD/COP:</span>
+              <span className="font-semibold">{tIndicators('usdCop')}:</span>
               <span className="text-red-100">${indicators.usdCop}</span>
             </div>
           )}
           {indicators.eurCop && (
             <div className="flex items-center space-x-2">
-              <span className="font-semibold">EUR/COP:</span>
+              <span className="font-semibold">{tIndicators('eurCop')}:</span>
               <span className="text-red-100">${indicators.eurCop}</span>
             </div>
           )}
           {indicators.btcUsd && (
             <div className="flex items-center space-x-2">
-              <span className="font-semibold">BTC/USD:</span>
+              <span className="font-semibold">{tIndicators('btcUsd')}:</span>
               <span className="text-red-100">${indicators.btcUsd}</span>
             </div>
           )}

@@ -3,6 +3,7 @@
 import { NewsItem } from '@app/shared';
 import NewsCard from './NewsCard';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 interface NewsGridProps {
   news: NewsItem[];
@@ -19,6 +20,8 @@ export default function NewsGrid({
 }: NewsGridProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations('pagination');
+  const tMessages = useTranslations('messages');
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -30,7 +33,7 @@ export default function NewsGrid({
     return (
       <div className="text-center py-12">
         <p className="text-gray-600 text-lg">
-          No hay noticias disponibles en esta categoría.
+          {tMessages('noNews')}
         </p>
       </div>
     );
@@ -49,9 +52,9 @@ export default function NewsGrid({
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
-            Anterior
+            {t('previous')}
           </button>
 
           <div className="flex space-x-1">
@@ -71,7 +74,7 @@ export default function NewsGrid({
                 <button
                   key={pageNum}
                   onClick={() => handlePageChange(pageNum)}
-                  className={`px-3 py-2 border rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2 border rounded-md text-sm font-medium transition-colors cursor-pointer ${
                     currentPage === pageNum
                       ? 'bg-red-800 text-white border-red-800 hover:bg-red-700'
                       : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
@@ -86,9 +89,9 @@ export default function NewsGrid({
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
-            Siguiente
+            {t('next')}
           </button>
         </div>
       )}

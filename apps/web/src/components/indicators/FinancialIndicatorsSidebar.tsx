@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface Indicators {
   usdCop: any;
@@ -11,6 +12,8 @@ interface Indicators {
 }
 
 export default function FinancialIndicatorsSidebar() {
+  const t = useTranslations('messages');
+  const tIndicators = useTranslations('indicators');
   const [indicators, setIndicators] = useState<Indicators>({
     usdCop: null,
     eurCop: null,
@@ -87,8 +90,8 @@ export default function FinancialIndicatorsSidebar() {
   if (indicators.loading) {
     return (
       <div className="bg-gradient-to-b from-red-700 to-red-800 text-white p-4 rounded-lg shadow-md">
-        <h3 className="text-lg font-bold mb-4">Indicadores</h3>
-        <p className="text-sm text-center animate-pulse">Cargando...</p>
+        <h3 className="text-lg font-bold mb-4">{tIndicators('title')}</h3>
+        <p className="text-sm text-center animate-pulse">{t('loadingIndicators')}</p>
       </div>
     );
   }
@@ -99,23 +102,23 @@ export default function FinancialIndicatorsSidebar() {
 
   return (
     <div className="bg-gradient-to-b from-red-700 to-red-800 text-white p-4 rounded-lg shadow-md sticky top-4">
-      <h3 className="text-lg font-bold mb-4 text-center">Indicadores Económicos</h3>
+      <h3 className="text-lg font-bold mb-4 text-center">{tIndicators('title')}</h3>
       <div className="space-y-4">
         {indicators.usdCop && (
           <div className="bg-red-900/30 p-3 rounded-lg">
-            <div className="text-sm font-semibold mb-1">USD/COP</div>
+            <div className="text-sm font-semibold mb-1">{tIndicators('usdCop')}</div>
             <div className="text-2xl font-bold text-red-100">${indicators.usdCop}</div>
           </div>
         )}
         {indicators.eurCop && (
           <div className="bg-red-900/30 p-3 rounded-lg">
-            <div className="text-sm font-semibold mb-1">EUR/COP</div>
+            <div className="text-sm font-semibold mb-1">{tIndicators('eurCop')}</div>
             <div className="text-2xl font-bold text-red-100">${indicators.eurCop}</div>
           </div>
         )}
         {indicators.btcUsd && (
           <div className="bg-red-900/30 p-3 rounded-lg">
-            <div className="text-sm font-semibold mb-1">BTC/USD</div>
+            <div className="text-sm font-semibold mb-1">{tIndicators('btcUsd')}</div>
             <div className="text-2xl font-bold text-red-100">${indicators.btcUsd}</div>
           </div>
         )}

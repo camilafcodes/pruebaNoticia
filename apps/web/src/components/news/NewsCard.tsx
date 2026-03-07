@@ -1,17 +1,12 @@
 import Link from 'next/link';
 import { NewsItem } from '@app/shared';
+import FormattedDate from '../common/FormattedDate';
 
 interface NewsCardProps {
   news: NewsItem;
 }
 
 export default function NewsCard({ news }: NewsCardProps) {
-  const formattedDate = new Date(news.newDate).toLocaleDateString('es-CO', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
   // Función para limpiar HTML tags de la descripción
   const cleanDescription = (html: string | undefined): string => {
     if (!html) return '';
@@ -45,7 +40,9 @@ export default function NewsCard({ news }: NewsCardProps) {
             {cleanDescription(news.description)}
           </p>
         )}
-        <p className="text-xs text-gray-400">{formattedDate}</p>
+        <p className="text-xs text-gray-400">
+          <FormattedDate date={news.newDate} format="short" />
+        </p>
       </div>
     </Link>
   );

@@ -3,16 +3,11 @@ import { fetchNewsByCategory, fetchTop4Actualidad } from '@/lib/api';
 import NewsCard from '@/components/news/NewsCard';
 import FinancialIndicatorsSidebar from '@/components/indicators/FinancialIndicatorsSidebar';
 import SportsScores from '@/components/sports/SportsScores';
-import Link from 'next/link';
+import BackLink from '@/components/navigation/BackLink';
+import FormattedDate from '@/components/common/FormattedDate';
+import CategoryBadge from '@/components/category/CategoryBadge';
+import LatestNewsSection from '@/components/news/LatestNewsSection';
 import { Category } from '@app/shared';
-
-const categoryNames: Record<Category, string> = {
-  actualidad: 'Actualidad',
-  politica: 'Política',
-  economia: 'Economía',
-  deportes: 'Deportes',
-  finanzas: 'Finanzas',
-};
 
 interface NewsDetailPageProps {
   params: Promise<{ category: string; newId: string }>;
@@ -63,35 +58,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     return html.replace(/<[^>]*>/g, '').trim();
   };
 
-  const formattedDate = new Date(newsItem.newDate).toLocaleDateString('es-CO', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Link
-        href={`/${category}`}
-        className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4"
-      >
-        <svg
-          className="w-5 h-5 mr-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-        Volver a {categoryNames[category as Category]}
-      </Link>
+      <BackLink category={category as Category} />
 
       {/* Layout de 2 columnas: 70% contenido + 30% sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 mb-8">
@@ -100,9 +69,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           <article className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="p-6 lg:p-8">
               <div className="mb-4">
-                <span className="inline-block px-3 py-1 text-xs font-semibold text-white bg-gray-900 rounded-full uppercase">
-                  {categoryNames[category as Category]}
-                </span>
+                <CategoryBadge category={category as Category} />
               </div>
 
               <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
@@ -112,7 +79,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               <div className="flex items-center text-sm text-gray-600 mb-6">
                 <span className="font-medium">{newsItem.portalName}</span>
                 <span className="mx-2">•</span>
-                <time dateTime={newsItem.newDate}>{formattedDate}</time>
+                <time dateTime={newsItem.newDate}>
+                  <FormattedDate date={newsItem.newDate} format="long" />
+                </time>
               </div>
 
               {newsItem.image && (
@@ -146,16 +115,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         </div>
       </div>
 
-      <section>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Últimas Noticias de Actualidad
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {top4Response.data.map((item) => (
-            <NewsCard key={item.newId} news={item} />
-          ))}
-        </div>
-      </section>
+      <LatestNewsSection news={top4Response.data} />
     </div>
   );
 }

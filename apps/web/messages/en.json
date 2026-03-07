@@ -1,0 +1,38 @@
+{
+  "categories": {
+    "actualidad": "News",
+    "politica": "Politics",
+    "economia": "Economy",
+    "deportes": "Sports",
+    "finanzas": "Finance"
+  },
+  "navigation": {
+    "siteTitle": "The National Chronicle",
+    "backTo": "Back to"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "messages": {
+    "noNews": "No news available in this category.",
+    "loadingIndicators": "Loading indicators...",
+    "readMore": "Read more",
+    "latestNews": "Latest News"
+  },
+  "indicators": {
+    "title": "Financial Indicators",
+    "usdCop": "USD/COP",
+    "eurCop": "EUR/COP",
+    "btcUsd": "Bitcoin/USD"
+  },
+  "metadata": {
+    "newsIn": "Latest news in",
+    "siteTitle": "The National Chronicle",
+    "siteDescription": "Truths power cannot hide",
+    "newsTitle": "News Article"
+  },
+  "footer": {
+    "copyright": "All rights reserved"
+  }
+}

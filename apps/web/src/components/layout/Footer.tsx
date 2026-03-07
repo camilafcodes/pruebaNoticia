@@ -1,9 +1,16 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 export default function Footer() {
+  const tNav = useTranslations('navigation');
+  const tFooter = useTranslations('footer');
+  
   return (
     <footer className="bg-gradient-to-t from-red-900 to-red-800 text-white mt-auto border-t-4 border-red-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col items-center space-y-4">
-          <h2 className="text-2xl font-bold text-red-50">La Crónica Nacional</h2>
+          <h2 className="text-2xl font-bold text-red-50">{tNav('siteTitle')}</h2>
           
           <div className="flex space-x-6">
             <a
@@ -43,7 +50,7 @@ export default function Footer() {
 
           <div className="text-center text-sm text-red-100">
             <p>© 2026 lacronicanacional.com</p>
-            <p>Todos los derechos reservados</p>
+            <p>{tFooter('copyright')}</p>
           </div>
         </div>
       </div>

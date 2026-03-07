@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { fetchNewsByCategory } from '@/lib/api';
 import NewsGrid from '@/components/news/NewsGrid';
 import FinancialIndicators from '@/components/indicators/FinancialIndicators';
+import CategoryHeader from '@/components/category/CategoryHeader';
 import { Category } from '@app/shared';
 
 const validCategories: Category[] = [
@@ -53,9 +54,7 @@ export default async function CategoryPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6 capitalize">
-        {categoryNames[category as Category]}
-      </h2>
+      <CategoryHeader category={category as Category} />
       <FinancialIndicators />
       <NewsGrid
         news={response.data}

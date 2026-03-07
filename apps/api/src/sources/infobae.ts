@@ -44,6 +44,7 @@ export const fetchInfobaeNews = async (): Promise<NewsItem[]> => {
         content: cleanedContent,
         category: CATEGORY,
         flag: false,
+        sourceUrl: item.link,
       });
     }
 

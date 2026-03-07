@@ -33,6 +33,10 @@ export const fetchValoraAnalitikNews = async (): Promise<NewsItem[]> => {
       
       // Remover primera etiqueta <figure> para evitar duplicación de imagen
       const contentWithoutFirstFigure = removeFirstFigureTag(rawContent);
+      
+      // Agregar link "Seguir leyendo" al final del contenido usando la URL original
+      const cleanedContent = cleanHtmlContent(contentWithoutFirstFigure);
+      const contentWithLink = cleanedContent + `<p><a href="${item.link}" target="_blank">Seguir leyendo</a></p>`;
 
       newsItems.push({
         newId,
@@ -41,9 +45,10 @@ export const fetchValoraAnalitikNews = async (): Promise<NewsItem[]> => {
         newDate: item.pubDate || item.isoDate || new Date().toISOString(),
         image: image || undefined,
         description: truncateDescription(description),
-        content: cleanHtmlContent(contentWithoutFirstFigure),
+        content: contentWithLink,
         category: CATEGORY,
         flag: false,
+        sourceUrl: item.link,
       });
     }
 

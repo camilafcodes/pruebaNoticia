@@ -13,6 +13,7 @@ export interface NewsItem {
     content: string;
     category: string;
     flag: boolean;
+    sourceUrl?: string;
 }
 export interface PaginatedNewsResponse {
     data: NewsItem[];

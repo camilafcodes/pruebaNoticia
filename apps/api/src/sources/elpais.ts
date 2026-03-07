@@ -45,6 +45,7 @@ export const fetchElPaisNews = async (): Promise<NewsItem[]> => {
         content: cleanHtmlContent(contentWithoutFirstImage),
         category: CATEGORY,
         flag: false,
+        sourceUrl: item.link,
       });
     }
 

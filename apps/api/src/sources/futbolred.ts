@@ -35,6 +35,10 @@ export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
       
       // Extraer imagen del enclosure (El Tiempo usa enclosure para imágenes)
       const image = extractImageFromItem(item);
+      
+      // Agregar link "Seguir leyendo" al final del contenido usando la URL original
+      const cleanedContent = cleanHtmlContent(content);
+      const contentWithLink = cleanedContent + `<p><a href="${item.link}" target="_blank">Seguir leyendo</a></p>`;
 
       newsItems.push({
         newId,
@@ -43,9 +47,10 @@ export const fetchFutbolredNews = async (): Promise<NewsItem[]> => {
         newDate: item.pubDate || item.isoDate || new Date().toISOString(),
         image: image || undefined,
         description: truncateDescription(description),
-        content: cleanHtmlContent(content),
+        content: contentWithLink,
         category: CATEGORY,
         flag: false,
+        sourceUrl: item.link,
       });
     }
 

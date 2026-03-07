@@ -10,7 +10,7 @@ export const getNewsByCategory = async (
 
   const countQuery = 'SELECT COUNT(*) FROM news WHERE category = $1 AND image IS NOT NULL';
   const dataQuery = `
-    SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag
+    SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, "sourceUrl"
     FROM news
     WHERE category = $1 AND image IS NOT NULL
     ORDER BY "newDate" DESC
@@ -33,6 +33,7 @@ export const getNewsByCategory = async (
       content: row.content,
       category: row.category,
       flag: row.flag,
+      sourceUrl: row.sourceUrl,
     }));
 
     return { data, total };
@@ -45,7 +46,7 @@ export const getNewsByCategory = async (
 export const getTop4Actualidad = async (): Promise<NewsItem[]> => {
   const query = `
     (
-      SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, 1 as priority
+      SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, "sourceUrl", 1 as priority
       FROM news
       WHERE category = 'actualidad' AND flag = true AND image IS NOT NULL
       ORDER BY "newDate" DESC
@@ -53,7 +54,7 @@ export const getTop4Actualidad = async (): Promise<NewsItem[]> => {
     )
     UNION ALL
     (
-      SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, 2 as priority
+      SELECT "newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, "sourceUrl", 2 as priority
       FROM news
       WHERE category = 'actualidad' AND flag = false AND image IS NOT NULL
       ORDER BY "newDate" DESC
@@ -76,6 +77,7 @@ export const getTop4Actualidad = async (): Promise<NewsItem[]> => {
       content: row.content,
       category: row.category,
       flag: row.flag,
+      sourceUrl: row.sourceUrl,
     }));
   } catch (error) {
     console.error('Error fetching top 4 actualidad:', error);
@@ -85,8 +87,8 @@ export const getTop4Actualidad = async (): Promise<NewsItem[]> => {
 
 export const insertNews = async (news: NewsItem): Promise<void> => {
   const query = `
-    INSERT INTO news ("newId", "portalName", "newTitle", "newDate", image, description, content, category, flag)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    INSERT INTO news ("newId", "portalName", "newTitle", "newDate", image, description, content, category, flag, "sourceUrl")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     ON CONFLICT ("newId") DO NOTHING
   `;
 
@@ -100,6 +102,7 @@ export const insertNews = async (news: NewsItem): Promise<void> => {
     news.content,
     news.category,
     news.flag,
+    news.sourceUrl || null,
   ];
 
   try {

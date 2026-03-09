@@ -63,24 +63,69 @@ export default function Navigation() {
           </div>
         </div>
 
-        {/* Mobile Navigation - scroll horizontal + hamburguesa */}
+        {/* Mobile Navigation - hamburguesa vertical */}
         <div className="md:hidden">
-          <div className="flex items-center justify-between h-12">
-            {/* Scroll horizontal de categorías */}
-            <div className="flex-1 overflow-x-auto scrollbar-hide">
-              <div className="flex space-x-1 py-2">
+          <div className="flex items-center justify-between h-14 px-2">
+            {/* Hamburguesa a la izquierda */}
+            <button
+              className="p-2 rounded-md text-red-100 hover:text-white hover:bg-red-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 cursor-pointer"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menú de navegación"
+              aria-expanded={mobileMenuOpen}
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {mobileMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+
+            {/* Título centrado (opcional) */}
+            <div className="flex-1 text-center">
+              <span className="text-white font-bold text-sm uppercase tracking-wide">
+                {categories.find(cat => isActive(cat.slug)) ? t(categories.find(cat => isActive(cat.slug))!.slug) : 'Menú'}
+              </span>
+            </div>
+
+            {/* Toggle de idioma a la derecha */}
+            <div className="flex items-center">
+              <LanguageToggle />
+            </div>
+          </div>
+
+          {/* Mobile Menu Dropdown - menú vertical */}
+          {mobileMenuOpen && (
+            <div className="bg-red-900 border-t border-red-700 shadow-lg">
+              <div className="py-2 space-y-1">
                 {categories.map((category) => (
                   <Link
                     key={category.slug}
                     href={`/${category.slug}`}
+                    onClick={() => setMobileMenuOpen(false)}
                     className={`
-                      relative flex-shrink-0 px-4 py-2 text-xs font-semibold uppercase tracking-wide
-                      rounded-full transition-colors
-                      focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400
+                      block px-6 py-3 text-sm font-semibold uppercase tracking-wide
+                      transition-colors cursor-pointer
                       ${
                         isActive(category.slug)
-                          ? 'bg-white text-red-900'
-                          : 'bg-red-700/50 text-red-100 hover:bg-red-700 hover:text-white'
+                          ? 'bg-red-700 text-white border-l-4 border-white'
+                          : 'text-red-100 hover:bg-red-700 hover:text-white hover:border-l-4 hover:border-red-300'
                       }
                     `}
                   >
@@ -88,48 +133,6 @@ export default function Navigation() {
                   </Link>
                 ))}
               </div>
-            </div>
-
-            {/* Language toggle y hamburger en mobile */}
-            <div className="flex items-center space-x-2 ml-2">
-              <LanguageToggle />
-              <button
-                className="flex-shrink-0 p-2 rounded-md text-red-100 hover:text-white hover:bg-red-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label="Menú adicional"
-              >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  {mobileMenuOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Menu Dropdown (opcional - para búsqueda, etc.) */}
-          {mobileMenuOpen && (
-            <div className="pb-3 pt-2 space-y-2 border-t border-red-700">
-              <button className="w-full text-left px-4 py-2 text-sm text-red-100 hover:bg-red-700 hover:text-white rounded transition-colors">
-                🔍 Buscar
-              </button>
             </div>
           )}
         </div>

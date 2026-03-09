@@ -23,7 +23,7 @@ export default function Header() {
       {/* Branding Bar - Layout en 2 columnas según referencia */}
       <div className="bg-gradient-to-br from-red-800 via-red-900 to-red-950 relative">
         {/* Franja de fecha que cruza todo el ancho */}
-        <div className="absolute top-9 left-0 right-0 bg-red-200 py-1 z-0">
+        <div className="absolute top-7 sm:top-9 left-0 right-0 bg-red-200 py-1 z-0">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <time className="text-xs sm:text-sm text-red-900 capitalize font-medium">
               {currentDate}

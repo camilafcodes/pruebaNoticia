@@ -49,7 +49,7 @@ export default function Footer() {
           </div>
 
           <div className="text-center text-sm text-red-100">
-            <p>© 2026 lacronicanacional.com</p>
+            <p>© 2015 lacronicanacional.com</p>
             <p>{tFooter('copyright')}</p>
           </div>
         </div>

@@ -67,7 +67,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         {/* Columna principal - 70% */}
         <div className="lg:col-span-7">
           <article className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="p-6 lg:p-8">
+            <div className="py-6 px-4 lg:py-8 lg:px-6">
               <div className="mb-4">
                 <CategoryBadge category={category as Category} />
               </div>
@@ -95,13 +95,13 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               )}
 
               {newsItem.description && (
-                <p className="text-xl text-gray-700 mb-6 font-medium">
+                <p className="text-xl text-gray-700 mb-6 font-medium text-justify">
                   {cleanDescription(newsItem.description)}
                 </p>
               )}
 
               <div
-                className="prose prose-lg max-w-none"
+                className="prose prose-lg max-w-none text-justify prose-p:mx-0 prose-p:my-4"
                 dangerouslySetInnerHTML={{ __html: newsItem.content }}
               />
             </div>
